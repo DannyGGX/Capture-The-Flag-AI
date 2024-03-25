@@ -2,9 +2,9 @@
 public class Transition : ITransition
 {
     public IState TargetState { get; }
-    public IPredicate Condition { get; }
+    public ICondition Condition { get; }
 
-    public Transition(IState targetState, IPredicate condition)
+    public Transition(IState targetState, ICondition condition)
     {
         TargetState = targetState;
         Condition = condition;

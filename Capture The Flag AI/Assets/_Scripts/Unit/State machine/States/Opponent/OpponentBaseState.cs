@@ -3,61 +3,114 @@ using UnityEngine.AI;
 
 public abstract class OpponentBaseState : BaseState
 {
-    protected NavMeshAgent NavMeshAgent { get; set; }
+    protected Opponent opponent { get; }
+    protected NavMeshAgent navMeshAgent { get; }
     
     /// <summary>
     /// NavMeshAgent target
     /// </summary>
-    public Transform Target { get; set; }
+    protected Transform Target { get; set; }
 
-    protected OpponentBaseState(NavMeshAgent navMeshAgent)
+    protected OpponentBaseState(NavMeshAgent navMeshAgent, Opponent opponent)
     {
-        NavMeshAgent = navMeshAgent;
+        this.navMeshAgent = navMeshAgent;
+        this.opponent = opponent;
     }
 }
 
 public class ChasePlayerState : OpponentBaseState
 {
-    public ChasePlayerState(NavMeshAgent navMeshAgent) : base(navMeshAgent)
+    public ChasePlayerState(NavMeshAgent navMeshAgent, Opponent opponent) : base(navMeshAgent, opponent)
     {
     }
-    
+
+    public override void OnEnter()
+    {
+        Debug.Log("ChasePlayerState");
+        Target = opponent.PlayerTransform;
+    }
+
     public override void FixedUpdate()
     {
-        NavMeshAgent.SetDestination(Target.position);
+        navMeshAgent.SetDestination(Target.position);
     }
 }
 
 public class AttackPlayerState : OpponentBaseState
 {
-    public AttackPlayerState(NavMeshAgent navMeshAgent) : base(navMeshAgent)
+    public AttackPlayerState(NavMeshAgent navMeshAgent, Opponent opponent) : base(navMeshAgent, opponent)
     {
+    }
+    
+    public override void OnEnter()
+    {
+        Debug.Log("AttackPlayerState");
+        Target = opponent.PlayerTransform;
     }
     
     public override void FixedUpdate()
     {
-        NavMeshAgent.SetDestination(Target.position);
+        navMeshAgent.SetDestination(Target.position);
+        opponent.Attack();
     }
 }
 
 public class GetPowerUpState : OpponentBaseState
 {
-    public GetPowerUpState(NavMeshAgent navMeshAgent) : base(navMeshAgent)
+    public GetPowerUpState(NavMeshAgent navMeshAgent, Opponent opponent) : base(navMeshAgent, opponent)
     {
+    }
+    
+    // pass in transform position from vision script
+    
+}
+
+public class FetchRedFlagState : OpponentBaseState
+{
+    public FetchRedFlagState(NavMeshAgent navMeshAgent, Opponent opponent) : base(navMeshAgent, opponent)
+    {
+    }
+
+    public override void OnEnter()
+    {
+        Debug.Log("FetchRedFlagState");
+        Target = FlagsTracker.Instance.RedFlagCurrentPos;
+    }
+
+    public override void FixedUpdate()
+    {
+        navMeshAgent.SetDestination(Target.position);
     }
 }
 
-public class RetrieveOwnFlagState : OpponentBaseState
+public class RescueBlueFlagState : OpponentBaseState
 {
-    public RetrieveOwnFlagState(NavMeshAgent navMeshAgent) : base(navMeshAgent)
+    public RescueBlueFlagState(NavMeshAgent navMeshAgent, Opponent opponent) : base(navMeshAgent, opponent)
     {
+    }
+    
+    public override void OnEnter()
+    {
+        Debug.Log("RescueBlueFlagState");
+        Target = FlagsTracker.Instance.BlueFlagCurrentPos;
+    }
+    public override void FixedUpdate()
+    {
+        navMeshAgent.SetDestination(Target.position);
     }
 }
 
-public class RescueEnemyFlagState : OpponentBaseState
+public class CarryRedFlagState : OpponentBaseState
 {
-    public RescueEnemyFlagState(NavMeshAgent navMeshAgent) : base(navMeshAgent)
+    public CarryRedFlagState(NavMeshAgent navMeshAgent, Opponent opponent) : base(navMeshAgent, opponent)
     {
+    }
+    
+    public override void OnEnter()
+    {
+        Debug.Log("CarryRedFlagState");
+        Target = opponent.RedBaseTransform;
+        navMeshAgent.SetDestination(Target.position);
     }
 }
 

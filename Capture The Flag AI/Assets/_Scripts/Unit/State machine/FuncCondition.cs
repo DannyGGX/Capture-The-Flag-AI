@@ -1,21 +1,19 @@
 using System;
 
-
 /// <summary>
 /// For functions that return a bool. Like an if statement
 /// </summary>
-public class FuncPredicate : IPredicate
+public class FuncCondition : ICondition
 {
     private readonly Func<bool> func;
 
-    public FuncPredicate(Func<bool> func)
+    public FuncCondition(Func<bool> func)
     {
         this.func = func;
     }
 
     public bool Evaluate()
     {
-        func.Invoke();
-        return true;
+        return func.Invoke();
     }
 }

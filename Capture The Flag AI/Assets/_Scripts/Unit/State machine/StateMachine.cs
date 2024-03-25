@@ -11,20 +11,24 @@ public class StateMachine
     
     public void Update()
     {
+        
+        currentNode.State?.Update();
+    }
+
+    public void FixedUpdate()
+    {
+        CheckAndHandleTransition(); // can be put into Update instead
+        currentNode.State.FixedUpdate();
+    }
+    
+    public void CheckAndHandleTransition()
+    {
         var transition = GetTransition();
 
         if (transition != null)
         {
             ChangeState(transition.TargetState);
         }
-
-        currentNode.State?.Update();
-    }
-
-
-    public void FixedUpdate()
-    {
-        currentNode.State.FixedUpdate();
     }
     
     public void SetState(IState state) // starting state
@@ -70,7 +74,7 @@ public class StateMachine
     /// <param name="from"></param>
     /// <param name="to"></param>
     /// <param name="condition"></param>
-    public void AddTransition(IState from, IState to, IPredicate condition)
+    public void AddTransition(IState from, IState to, ICondition condition)
     {
         GetOrAddNode(from).AddTransition(GetOrAddNode(to).State, condition);
     }
@@ -80,7 +84,7 @@ public class StateMachine
     /// </summary>
     /// <param name="to"></param>
     /// <param name="condition"></param>
-    public void AddAnyTransition(IState to, IPredicate condition)
+    public void AddAnyTransition(IState to, ICondition condition)
     {
         anyTransitions.Add(new Transition(GetOrAddNode(to).State, condition));
     }
@@ -107,7 +111,7 @@ public class StateMachine
             this.State = state;
             this.Transitions = new HashSet<ITransition>();
         }
-        public void AddTransition(IState targetState, IPredicate condition)
+        public void AddTransition(IState targetState, ICondition condition)
         {
             Transitions.Add(new Transition(targetState, condition));
         }

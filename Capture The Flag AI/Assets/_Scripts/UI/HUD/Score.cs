@@ -31,11 +31,20 @@ public class Score : MonoBehaviour
         {
             scoreSaveSO.playerScore++;
             playerScoreText.text = $"Blue score: {scoreSaveSO.playerScore}";
+
+            if (scoreSaveSO.playerScore == maxScore)
+            {
+                GameManager.Instance.PlayerWinGame();
+            }
         }
         else
         {
             scoreSaveSO.opponentScore++;
             opponentScoreText.text = $"Red score: {scoreSaveSO.opponentScore}";
+            if (scoreSaveSO.opponentScore == maxScore)
+            {
+                GameManager.Instance.PlayerLoseGame();
+            }
         }
     }
     

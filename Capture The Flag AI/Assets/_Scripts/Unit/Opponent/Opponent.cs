@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,7 +28,7 @@ public class Opponent : Unit
         
         //Declare states
         var chasePlayerState = new ChasePlayerState(agent, this);
-        var attackPlayerState = new AttackPlayerState(agent, this);
+        var attackPlayerState = new OpponentLanceBuildUpState(agent, this);
         var getPowerUpState = new GetPowerUpState(agent, this);
         var rescueBlueFlagState = new RescueBlueFlagState(agent, this);
         var fetchRedFlagState = new FetchRedFlagState(agent, this);
@@ -48,30 +49,36 @@ public class Opponent : Unit
     {
         stateMachine.AddTransition(from, to, condition);
     }
-    
     private void AnyTransition(IState to, ICondition condition)
     {
         stateMachine.AddAnyTransition(to, condition);
     }
-
-    void FixedUpdate()
-    {
-        stateMachine.FixedUpdate();
-    }
-
+    
     private bool DetermineIfRescueBlueFlag()
     {
         return Vector3.Distance(transform.position, FlagsTracker.Instance.BlueFlagCurrentPos.position) < rescueFlagDistance;
     }
-    
     private bool DetermineIfCarryRedFlag()
     {
         return FlagsTracker.Instance.RedFlag.IsCarried;
     }
-    
     // private bool DetermineIfFetchRedFlag()
     // {
     //     
     // }
 
+    void FixedUpdate()
+    {
+        stateMachine.FixedUpdate();
+    }
+    
+    void Update()
+    {
+        stateMachine.Update();
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        BaseOnEnterCollision(other);
+    }
 }

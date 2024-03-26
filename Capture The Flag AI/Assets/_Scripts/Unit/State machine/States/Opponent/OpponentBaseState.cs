@@ -36,9 +36,9 @@ public class ChasePlayerState : OpponentBaseState
     }
 }
 
-public class AttackPlayerState : OpponentBaseState
+public class OpponentLanceBuildUpState : OpponentBaseState
 {
-    public AttackPlayerState(NavMeshAgent navMeshAgent, Opponent opponent) : base(navMeshAgent, opponent)
+    public OpponentLanceBuildUpState(NavMeshAgent navMeshAgent, Opponent opponent) : base(navMeshAgent, opponent)
     {
     }
     
@@ -52,6 +52,43 @@ public class AttackPlayerState : OpponentBaseState
     {
         navMeshAgent.SetDestination(Target.position);
         opponent.Attack();
+    }
+}
+
+public class OpponentLanceAttackState : OpponentBaseState
+{
+    public OpponentLanceAttackState(NavMeshAgent navMeshAgent, Opponent opponent) : base(navMeshAgent, opponent)
+    {
+    }
+    
+    public override void OnEnter()
+    {
+        Debug.Log("AttackPlayerState");
+        Target = opponent.PlayerTransform;
+    }
+    
+    public override void FixedUpdate()
+    {
+        navMeshAgent.SetDestination(Target.position);
+        opponent.Attack();
+    }
+}
+
+public class AvoidPlayerState : OpponentBaseState
+{
+    public AvoidPlayerState(NavMeshAgent navMeshAgent, Opponent opponent) : base(navMeshAgent, opponent)
+    {
+    }
+    
+    public override void OnEnter()
+    {
+        Debug.Log("AvoidPlayerState");
+        Target = opponent.PlayerTransform;
+    }
+    
+    public override void FixedUpdate()
+    {
+        
     }
 }
 

@@ -46,6 +46,14 @@ public class PauseMenu : MonoBehaviour
     {
         PauseManager.Instance.SetPauseState(false);
         SceneManagerScript.Instance.LoadScene(Scenes.MainMenu);
+        GameManager.Instance.EndMatch();
+    }
+    
+    public void RestartLevel()
+    {
+        PauseManager.Instance.SetPauseState(false);
+        SceneManagerScript.Instance.ReloadScene();
+        GameManager.Instance.EndMatch();
     }
 
     public void QuitGame()

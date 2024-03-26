@@ -8,6 +8,7 @@ public class SceneManagerScript : MonoBehaviour
     public static SceneManagerScript Instance { get; private set; }
 
     [SerializeField] private ScenesSO scenes;
+    
 
     private void Awake()
     {
@@ -15,7 +16,10 @@ public class SceneManagerScript : MonoBehaviour
             Instance = this;
         else
             Destroy(this);
+
+        
     }
+    
 
     public void LoadScene(Scenes sceneName)
     {

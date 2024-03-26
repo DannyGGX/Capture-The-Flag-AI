@@ -9,6 +9,7 @@ public class Score : MonoBehaviour
     [SerializeField] private TextMeshProUGUI playerScoreText;
     [SerializeField] private TextMeshProUGUI opponentScoreText;
     [SerializeField] private ScoreSaveSO scoreSaveSO;
+    private bool scoreAdded = false;
 
     public static Score Instance { get; private set; }
     private void Awake()
@@ -21,12 +22,17 @@ public class Score : MonoBehaviour
         {
             Instance = this;
         }
-        
+
+        scoreAdded = false;
         playerScoreText.text = $"Blue score: {scoreSaveSO.playerScore}";
         opponentScoreText.text = $"Red score: {scoreSaveSO.opponentScore}";
     }
     public void AddScore(TeamEnum team)
     {
+        if (scoreAdded)
+        {
+            return;
+        }
         if (team == TeamEnum.Blue)
         {
             scoreSaveSO.playerScore++;
@@ -46,6 +52,8 @@ public class Score : MonoBehaviour
                 GameManager.Instance.PlayerLoseGame();
             }
         }
+
+        scoreAdded = true;
     }
     
     public void ResetScore()

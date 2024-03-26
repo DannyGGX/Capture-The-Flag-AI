@@ -19,7 +19,7 @@ public abstract class Unit : MonoBehaviour
     MeshRenderer meshRenderer;
     [SerializeField] protected Material normalMaterial;
     [SerializeField] protected Material deathMaterial;
-    [SerializeField] protected FlagBearer flagBearer;
+    public FlagBearer flagBearer;
 
     protected void BaseAwake()
     {
@@ -37,17 +37,18 @@ public abstract class Unit : MonoBehaviour
             }
         }
 
-        if (other.collider.TryGetComponent<Base>(out var flagBase))
-        {
-            if (flagBase.Team != Team && flagBearer.IsHoldingFlag)
-            {
-                //flagBearer.DropFlag(); doesn't need to do this
-                GameManager.Instance.FlagCaptured(Team);
-            }
-        }
+        // if (other.collider.TryGetComponent<Base>(out var flagBase))
+        // {
+        //     if (flagBase.Team == Team && flagBearer.IsHoldingFlag)
+        //     {
+        //         this.Log("Flag Captured");
+        //         //flagBearer.DropFlag(); doesn't need to do this
+        //         GameManager.Instance.FlagCaptured(Team);
+        //     }
+        // }
     }
 
-    private void TakeDamage()
+    public void TakeDamage()
     {
         if (!IsProtected)
         {

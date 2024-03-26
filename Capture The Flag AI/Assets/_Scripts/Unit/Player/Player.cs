@@ -15,18 +15,38 @@ public class Player : Unit
         _collider = GetComponent<Collider>();
     }
 
-    private void OnCollisionEnter(Collision other)
+    private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        BaseOnEnterCollision(other);
-        if (other.gameObject.CompareTag("PlayerFlag"))
+        //BaseOnEnterCollision(hit);
+        if (hit.collider.TryGetComponent<Unit>(out var unit))
+        {
+            if (lance.CurrentLanceState == LanceState.Attack)
+            {
+                unit.TakeDamage();
+            }
+        }
+
+        if (hit.collider.TryGetComponent<Base>(out var flagBase))
+        {
+            if (flagBase.Team == Team && flagBearer.IsHoldingFlag)
+            {
+                this.Log("Flag Captured");
+                //flagBearer.DropFlag(); doesn't need to do this
+                GameManager.Instance.FlagCaptured(Team);
+            }
+        }
+        // end of base collision
+        if (hit.gameObject.CompareTag("PlayerFlag"))
         {
             flagInteractUI.ShowPickUpFlagPrompt();
         }
-        else if (other.gameObject.CompareTag("OpponentFlag"))
+        else if (hit.gameObject.CompareTag("OpponentFlag"))
         {
             flagInteractUI.ShowReturnFlagPrompt();
         }
     }
+
+    
 
     private void OnCollisionExit(Collision other)
     {
@@ -39,6 +59,7 @@ public class Player : Unit
             flagInteractUI.Hide();
         }
     }
+    
 
     protected override void Die()
     {

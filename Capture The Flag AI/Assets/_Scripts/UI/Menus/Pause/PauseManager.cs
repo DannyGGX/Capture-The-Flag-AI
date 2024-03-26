@@ -47,7 +47,7 @@ public class PauseManager : MonoBehaviour
         ControlsEnabled = true;
     }
 
-    public void DisableControls() // To disable input before and after race
+    public void DisableControls()
     {
         ControlsEnabled = false;
     }

@@ -1,9 +1,15 @@
+using System;
 using TMPro;
 using UnityEngine;
 
-public class FlagInteractUI
+public class FlagInteractUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI text;
+
+    private void Awake()
+    {
+        Hide();
+    }
 
     public void ShowPickUpFlagPrompt()
     {

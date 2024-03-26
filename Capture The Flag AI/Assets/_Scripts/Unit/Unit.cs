@@ -24,7 +24,7 @@ public abstract class Unit : MonoBehaviour
     protected void BaseAwake()
     {
         meshRenderer = GetComponent<MeshRenderer>();
-        spawner?.SpawnAtRandomPoint(this);
+        spawner.SpawnAtRandomPoint(this);
     }
 
     protected void BaseOnEnterCollision(Collision other)

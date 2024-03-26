@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3a6c923aaf5bbc48a4591276ed1f3a7, type: 3}
   m_Name: PlayerStats
   m_EditorClassIdentifier: 
-  WalkSpeed: 10
-  SprintSpeed: 15
+  WalkSpeed: 5
+  SprintSpeed: 10
   InputSmoothTime: 0.05
-  JumpHeight: 15
+  JumpHeight: 12
   CoyoteTime: 0.01
-  GravityMagnitude: 7
-  MouseSensitivity: 20
+  GravityMagnitude: 6
+  MouseSensitivity: 8

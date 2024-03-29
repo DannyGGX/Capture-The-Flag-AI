@@ -1,7 +1,7 @@
 using System;
 
 /// <summary>
-/// For functions that return a bool. Like an if statement
+/// For functions that return a bool. Like the parameter of an if statement
 /// </summary>
 public class FuncCondition : ICondition
 {

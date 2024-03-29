@@ -12,18 +12,14 @@ public abstract class BaseState : IState
     
     public virtual void OnEnter()
     {
-        //no op
     }
     public virtual void Update()
     {
-        //no op
     }
     public virtual void FixedUpdate()
     {
-        //no op
     }
     public virtual void OnExit()
     {
-        //no op
     }
 }

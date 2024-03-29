@@ -1,17 +1,28 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
+/// <summary>
+/// Finite state machine that supports transitions from any state and can handle transitions internally.
+/// To use it: declare states, then define transitions between them and finally call SetInitialState
+/// States can be transitioned to from within other state classes if the state machine and the to-state is passed in the state constructor.
+/// Con: transitions are checked very often for every state, which can be computationally expensive depending on the conditions
+/// </summary>
 public class StateMachine
 {
-    private StateNode currentNode;
+    private StateNode currentNode; // for the active state
+    
+    /// <summary>
+    /// each node is a different child class of IState.
+    /// The class (Type) is used to differentiate between nodes
+    /// </summary>
     private Dictionary<System.Type, StateNode> nodes = new();
+    
+    /// <summary>
+    /// Transitions from any state
+    /// </summary>
     private HashSet<ITransition> anyTransitions = new();
     
     public void Update()
     {
-        
         currentNode.State?.Update();
     }
 
@@ -21,35 +32,43 @@ public class StateMachine
         currentNode.State.FixedUpdate();
     }
     
-    public void CheckAndHandleTransition()
+    private void CheckAndHandleTransition()
     {
-        var transition = GetTransition();
-
+        ITransition transition = GetTransition();
+        
         if (transition != null)
         {
             ChangeState(transition.TargetState);
         }
     }
     
-    public void SetState(IState state) // starting state
+    public void SetInitialState(IState state)
     {
         currentNode = nodes[state.GetType()];
         currentNode.State?.OnEnter();
     }
-
+    
+    /// <summary>
+    /// Other classes can call this to change the state
+    /// </summary>
     public void ChangeState(IState targetState)
     {
         if (targetState == currentNode.State) return;
         
-        var previousState = currentNode.State;
-        var nextState = nodes[targetState.GetType()].State;
-        previousState?.OnExit();
-        nextState?.OnEnter();
+        currentNode.State?.OnExit();
         currentNode = nodes[targetState.GetType()];
+        currentNode.State?.OnEnter();
     }
     
-    public ITransition GetTransition()
+    public IState GetCurrentState()
     {
+        return currentNode.State;
+    }
+    
+    private ITransition GetTransition()
+    {
+        // check the anyTransitions first
+        // The order that transitions are added matter
         foreach (var transition in anyTransitions)
         {
             if (transition.Condition.Evaluate())
@@ -58,7 +77,7 @@ public class StateMachine
             }
         }
 
-        foreach (var transition in currentNode.Transitions)
+        foreach (var transition in currentNode.SpecificTransitions)
         {
             if (transition.Condition.Evaluate())
             {
@@ -66,29 +85,37 @@ public class StateMachine
             }
         }
 
-        return null;
+        return null; // no transition condition met
     }
     /// <summary>
     /// For transitions that happen between specific states
     /// </summary>
-    /// <param name="from"></param>
-    /// <param name="to"></param>
-    /// <param name="condition"></param>
-    public void AddTransition(IState from, IState to, ICondition condition)
+    public void AddSpecificTransition(IState from, IState to, ICondition condition)
     {
         GetOrAddNode(from).AddTransition(GetOrAddNode(to).State, condition);
     }
     
     /// <summary>
-    /// For states that transition to any state
+    /// For states that can be transitioned to from any other state.
+    /// Transitions that are declared before other transitions will be checked first.
     /// </summary>
-    /// <param name="to"></param>
-    /// <param name="condition"></param>
     public void AddAnyTransition(IState to, ICondition condition)
     {
         anyTransitions.Add(new Transition(GetOrAddNode(to).State, condition));
     }
 
+    /// <summary>
+    /// To add a state to the state machine without defining a transition from this state to another.
+    /// The calling script will control the transitioning to another state.
+    /// </summary>
+    public void AddManualTransitionState(IState state)
+    {
+        GetOrAddNode(state);
+    }
+
+    /// <summary>
+    /// Helper function that stops duplicate nodes from being created
+    /// </summary>
     private StateNode GetOrAddNode(IState state)
     {
         StateNode node = nodes.GetValueOrDefault(state.GetType(), null); // null if not found
@@ -101,20 +128,22 @@ public class StateMachine
         return node;
     }
     
-    public class StateNode
+    /// <summary>
+    /// States are represented with nodes in order for them to be connected. Transitions connect them
+    /// </summary>
+    private class StateNode
     {
         public IState State;
-        public HashSet<ITransition> Transitions { get; }
+        public HashSet<ITransition> SpecificTransitions { get; }
 
         public StateNode(IState state)
         {
             this.State = state;
-            this.Transitions = new HashSet<ITransition>();
+            this.SpecificTransitions = new HashSet<ITransition>();
         }
         public void AddTransition(IState targetState, ICondition condition)
         {
-            Transitions.Add(new Transition(targetState, condition));
+            SpecificTransitions.Add(new Transition(targetState, condition));
         }
-
     }
 }

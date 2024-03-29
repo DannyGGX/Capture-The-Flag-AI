@@ -3,5 +3,8 @@
 /// </summary>
 public interface ICondition
 {
+    /// <summary>
+    /// Check if the condition is met
+    /// </summary>
     bool Evaluate();
 }

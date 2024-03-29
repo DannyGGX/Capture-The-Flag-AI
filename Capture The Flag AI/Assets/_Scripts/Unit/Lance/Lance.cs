@@ -35,14 +35,14 @@ public class Lance : MonoBehaviour
         SpecificTransition(cooldownState, readyState, new FuncCondition(DetermineIfReady));
         
         // Set initial state
-        stateMachine.SetState(readyState);
+        stateMachine.SetInitialState(readyState);
 
         currentLanceCount = stats.InitialLanceCount;
         
     }
     private void SpecificTransition(IState from, IState to, ICondition condition)
     {
-        stateMachine.AddTransition(from, to, condition);
+        stateMachine.AddSpecificTransition(from, to, condition);
     }
     
     protected bool DetermineIfAttack()
@@ -65,17 +65,6 @@ public class Lance : MonoBehaviour
     }
 
     
-    
-    public void IncreaseBuildUpAmount(float amount)
-    {
-        currentBuildUpAmount += amount;
-        if (currentBuildUpAmount > stats.MaxBuildUpAmount)
-        {
-            currentBuildUpAmount = stats.MaxBuildUpAmount;
-        }
-    }
-
-    
 
     public void ChangeProtection(bool isProtected)
     {
@@ -84,10 +73,6 @@ public class Lance : MonoBehaviour
     
     private void Update()
     {
-        if (CurrentLanceState == LanceState.Ready)
-        {
-            
-        }
         stateMachine.Update();
     }
 

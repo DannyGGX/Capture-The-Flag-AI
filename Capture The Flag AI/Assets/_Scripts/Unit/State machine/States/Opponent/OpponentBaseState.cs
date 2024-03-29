@@ -36,6 +36,73 @@ public class ChasePlayerState : OpponentBaseState
     }
 }
 
+public class AttackPlayerState : OpponentBaseState
+{
+    public AttackPlayerState(NavMeshAgent navMeshAgent, Opponent opponent) : base(navMeshAgent, opponent)
+    {
+    }
+
+    public override void OnEnter()
+    {
+        Debug.Log("AttackPlayerState");
+        Target = opponent.PlayerTransform;
+    }
+
+    public override void FixedUpdate()
+    {
+        navMeshAgent.SetDestination(Target.position);
+    }
+}
+
+public class FetchRedFlagState : OpponentBaseState
+{
+    public FetchRedFlagState(NavMeshAgent navMeshAgent, Opponent opponent) : base(navMeshAgent, opponent)
+    {
+    }
+
+    public override void OnEnter()
+    {
+        Debug.Log("FetchRedFlagState");
+        Target = FlagsTracker.Instance.RedFlagCurrentPos;
+    }
+
+    public override void FixedUpdate()
+    {
+        navMeshAgent.SetDestination(Target.position);
+    }
+}
+
+public class RescueBlueFlagState : OpponentBaseState
+{
+    public RescueBlueFlagState(NavMeshAgent navMeshAgent, Opponent opponent) : base(navMeshAgent, opponent)
+    {
+    }
+    
+    public override void OnEnter()
+    {
+        Debug.Log("RescueBlueFlagState");
+        Target = FlagsTracker.Instance.BlueFlagCurrentPos;
+    }
+    public override void FixedUpdate()
+    {
+        navMeshAgent.SetDestination(Target.position);
+    }
+}
+
+public class CarryRedFlagState : OpponentBaseState
+{
+    public CarryRedFlagState(NavMeshAgent navMeshAgent, Opponent opponent) : base(navMeshAgent, opponent)
+    {
+    }
+    
+    public override void OnEnter()
+    {
+        Debug.Log("CarryRedFlagState");
+        Target = opponent.RedBaseTransform;
+        navMeshAgent.SetDestination(Target.position);
+    }
+}
+
 public class OpponentLanceBuildUpState : OpponentBaseState
 {
     public OpponentLanceBuildUpState(NavMeshAgent navMeshAgent, Opponent opponent) : base(navMeshAgent, opponent)
@@ -101,53 +168,3 @@ public class GetPowerUpState : OpponentBaseState
     // pass in transform position from vision script
     
 }
-
-public class FetchRedFlagState : OpponentBaseState
-{
-    public FetchRedFlagState(NavMeshAgent navMeshAgent, Opponent opponent) : base(navMeshAgent, opponent)
-    {
-    }
-
-    public override void OnEnter()
-    {
-        Debug.Log("FetchRedFlagState");
-        Target = FlagsTracker.Instance.RedFlagCurrentPos;
-    }
-
-    public override void FixedUpdate()
-    {
-        navMeshAgent.SetDestination(Target.position);
-    }
-}
-
-public class RescueBlueFlagState : OpponentBaseState
-{
-    public RescueBlueFlagState(NavMeshAgent navMeshAgent, Opponent opponent) : base(navMeshAgent, opponent)
-    {
-    }
-    
-    public override void OnEnter()
-    {
-        Debug.Log("RescueBlueFlagState");
-        Target = FlagsTracker.Instance.BlueFlagCurrentPos;
-    }
-    public override void FixedUpdate()
-    {
-        navMeshAgent.SetDestination(Target.position);
-    }
-}
-
-public class CarryRedFlagState : OpponentBaseState
-{
-    public CarryRedFlagState(NavMeshAgent navMeshAgent, Opponent opponent) : base(navMeshAgent, opponent)
-    {
-    }
-    
-    public override void OnEnter()
-    {
-        Debug.Log("CarryRedFlagState");
-        Target = opponent.RedBaseTransform;
-        navMeshAgent.SetDestination(Target.position);
-    }
-}
-

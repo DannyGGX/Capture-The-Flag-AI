@@ -42,12 +42,12 @@ public class Opponent : Unit
         AnyTransition(fetchRedFlagState, new FuncCondition(() => !DetermineIfRescueBlueFlag() && !DetermineIfCarryRedFlag())); // move to blue base
         
         // Set initial state
-        stateMachine.SetState(fetchRedFlagState);
+        stateMachine.SetInitialState(fetchRedFlagState);
     }
     
     private void SpecificTransition(IState from, IState to, ICondition condition)
     {
-        stateMachine.AddTransition(from, to, condition);
+        stateMachine.AddSpecificTransition(from, to, condition);
     }
     private void AnyTransition(IState to, ICondition condition)
     {

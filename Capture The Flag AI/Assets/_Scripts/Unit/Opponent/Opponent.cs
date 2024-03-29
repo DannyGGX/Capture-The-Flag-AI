@@ -6,10 +6,12 @@ using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(Vision))]
+[RequireComponent(typeof(Rigidbody))]
 public class Opponent : Unit
 {
     private NavMeshAgent agent;
     private StateMachine stateMachine;
+    private Rigidbody _rigidbody;
     [SerializeField] private Vision playerDetector;
     
     public Transform PlayerTransform;
@@ -23,6 +25,7 @@ public class Opponent : Unit
     {
         BaseAwake();
         agent = GetComponent<NavMeshAgent>();
+        _rigidbody = GetComponent<Rigidbody>();
         
         stateMachine = new StateMachine();
         
@@ -80,5 +83,19 @@ public class Opponent : Unit
     private void OnCollisionEnter(Collision other)
     {
         BaseOnEnterCollision(other);
+    }
+
+    protected override void Die()
+    {
+        base.Die();
+        agent.enabled = false;
+        _rigidbody.useGravity = false;
+    }
+
+    protected override void Respawn()
+    {
+        base.Respawn();
+        _rigidbody.useGravity = true;
+        agent.enabled = true;
     }
 }

@@ -12,13 +12,14 @@ public class Opponent : Unit
     private NavMeshAgent agent;
     private StateMachine stateMachine;
     private Rigidbody _rigidbody;
+    [SerializeField] private AiAgentMovementStatsSO movementStats;
     [SerializeField] private Vision playerDetector;
     
     public Transform PlayerTransform;
     public Transform RedBaseTransform;
     public Transform BlueBaseTransform;
     
-    [SerializeField] float rescueFlagDistance = 5f;
+    [SerializeField] float rescueFlagDistance = 8;
     
     
     private void Awake()
@@ -30,8 +31,8 @@ public class Opponent : Unit
         stateMachine = new StateMachine();
         
         //Declare states
-        var chasePlayerState = new ChasePlayerState(agent, this);
-        var attackPlayerState = new OpponentLanceBuildUpState(agent, this);
+        var chasePlayerState = new ChasePlayerState(agent, this, movementStats);
+        var attackPlayerState = new AttackPlayerState(agent, this, movementStats);
         var getPowerUpState = new GetPowerUpState(agent, this);
         var rescueBlueFlagState = new RescueBlueFlagState(agent, this);
         var fetchRedFlagState = new FetchRedFlagState(agent, this);
@@ -46,6 +47,8 @@ public class Opponent : Unit
         
         // Set initial state
         stateMachine.SetInitialState(fetchRedFlagState);
+        
+        SetAgentMovementStats();
     }
     
     private void SpecificTransition(IState from, IState to, ICondition condition)
@@ -59,7 +62,9 @@ public class Opponent : Unit
     
     private bool DetermineIfRescueBlueFlag()
     {
-        return Vector3.Distance(transform.position, FlagsTracker.Instance.BlueFlagCurrentPos.position) < rescueFlagDistance;
+        return FlagsTracker.Instance.IsBlueFlagAtRedBase() == false
+               &&
+               Vector3.Distance(transform.position, FlagsTracker.Instance.BlueFlagCurrentPos.position) < rescueFlagDistance;
     }
     private bool DetermineIfCarryRedFlag()
     {
@@ -69,6 +74,13 @@ public class Opponent : Unit
     // {
     //     
     // }
+
+    private void SetAgentMovementStats()
+    {
+        agent.speed = movementStats.Speed;
+        agent.angularSpeed = movementStats.AngularSpeed;
+        agent.acceleration = movementStats.Acceleration;
+    }
 
     void FixedUpdate()
     {

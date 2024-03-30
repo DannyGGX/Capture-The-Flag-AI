@@ -52,4 +52,9 @@ public class FlagsTracker : MonoBehaviour
             RedFlagCurrentPos = RedFlagBearer;
         }
     }
+
+    public bool IsBlueFlagAtRedBase()
+    {
+        return BlueFlag.AtSpawnPoint;
+    }
 }

@@ -7,10 +7,7 @@ using Random = System.Random;
 public class Spawner : MonoBehaviour
 {
     [SerializeField] private Transform[] spawnPoints;
-    [SerializeField] private float spawnDelay = 1f;
     private System.Random _random;
-
-    
 
     public void SpawnAtRandomPoint(Unit unit)
     {

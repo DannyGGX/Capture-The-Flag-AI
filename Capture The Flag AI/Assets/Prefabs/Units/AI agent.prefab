@@ -2169,11 +2169,12 @@ MonoBehaviour:
   normalMaterial: {fileID: 2100000, guid: 4ff18dd51ba26954895586b60ebd649c, type: 2}
   deathMaterial: {fileID: 2100000, guid: 4aa5809f8d615a34f8c3a9069087c224, type: 2}
   flagBearer: {fileID: 8794038227124354288}
+  movementStats: {fileID: 11400000, guid: 98a4251e33f5f1a479b82b030470c2b0, type: 2}
   playerDetector: {fileID: 912945436791704951}
   PlayerTransform: {fileID: 0}
   RedBaseTransform: {fileID: 0}
   BlueBaseTransform: {fileID: 0}
-  rescueFlagDistance: 5
+  rescueFlagDistance: 8
 --- !u!114 &912945436791704951
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2190,7 +2191,7 @@ MonoBehaviour:
   detectionRadius: 10
   innerDetectionRadius: 5
   detectionCooldown: 1
-  attackRange: 2
+  attackRange: 4.5
 --- !u!114 &8794038227124354288
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -20,37 +20,52 @@ public abstract class OpponentBaseState : BaseState
 
 public class ChasePlayerState : OpponentBaseState
 {
-    public ChasePlayerState(NavMeshAgent navMeshAgent, Opponent opponent) : base(navMeshAgent, opponent)
+    AiAgentMovementStatsSO movementStats;
+    public ChasePlayerState(NavMeshAgent navMeshAgent, Opponent opponent, AiAgentMovementStatsSO movementStats) : base(navMeshAgent, opponent)
     {
+        this.movementStats = movementStats;
     }
 
     public override void OnEnter()
     {
         Debug.Log("ChasePlayerState");
         Target = opponent.PlayerTransform;
+        navMeshAgent.speed = movementStats.PlayerDetectionSpeed;
     }
 
     public override void FixedUpdate()
     {
         navMeshAgent.SetDestination(Target.position);
     }
+    public override void OnExit()
+    {
+        navMeshAgent.speed = movementStats.Speed;
+    }
 }
 
 public class AttackPlayerState : OpponentBaseState
 {
-    public AttackPlayerState(NavMeshAgent navMeshAgent, Opponent opponent) : base(navMeshAgent, opponent)
+    AiAgentMovementStatsSO movementStats;
+    public AttackPlayerState(NavMeshAgent navMeshAgent, Opponent opponent, AiAgentMovementStatsSO movementStats) : base(navMeshAgent, opponent)
     {
+        this.movementStats = movementStats;
     }
 
     public override void OnEnter()
     {
         Debug.Log("AttackPlayerState");
         Target = opponent.PlayerTransform;
+        navMeshAgent.speed = movementStats.AttackSpeed;
     }
 
     public override void FixedUpdate()
     {
         navMeshAgent.SetDestination(Target.position);
+    }
+
+    public override void OnExit()
+    {
+        navMeshAgent.speed = movementStats.Speed;
     }
 }
 

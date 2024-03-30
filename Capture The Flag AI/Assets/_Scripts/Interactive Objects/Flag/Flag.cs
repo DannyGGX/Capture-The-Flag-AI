@@ -13,6 +13,7 @@ public class Flag : MonoBehaviour
     private Collider _collider;
 
     [HideInInspector] public bool IsCarried = false;
+    public bool AtSpawnPoint => transform.position == spawnPoint;
 
     private Unit unit;
 
@@ -27,11 +28,9 @@ public class Flag : MonoBehaviour
     {
         unit = other.gameObject.GetComponent<Unit>();
         if (unit == null) return;
-        Debug.Log("flag trigger entered");
 
         if (unit.Team == team)
         {
-            Debug.Log("Pick up flag");
             PickUpOwnColourFlag();
         }
         else

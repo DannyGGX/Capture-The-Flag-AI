@@ -32,12 +32,12 @@ public class Flag : MonoBehaviour
         if (unit.Team == team)
         {
             PickUpOwnColourFlag();
+            FlagsTracker.Instance.FlagIsPickedUp(team);
         }
         else
         {
             ReturnFlagToSpawner();
         }
-        FlagsTracker.Instance.FlagIsPickedUp(team);
     }
 
     private void PickUpOwnColourFlag()

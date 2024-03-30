@@ -44006,10 +44006,18 @@ PrefabInstance:
       propertyPath: BlueBaseTransform
       value: 
       objectReference: {fileID: 1689199697}
+    - target: {fileID: 5698410640872228684, guid: 2485ec3a7297938469bafd3b81c9cb60, type: 3}
+      propertyPath: m_ObstacleAvoidanceType
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7507230772442486869, guid: 2485ec3a7297938469bafd3b81c9cb60, type: 3}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 2122440954}
+    - target: {fileID: 8479648605568538244, guid: 2485ec3a7297938469bafd3b81c9cb60, type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8794038227124354288, guid: 2485ec3a7297938469bafd3b81c9cb60, type: 3}
       propertyPath: ownFlag
       value: 

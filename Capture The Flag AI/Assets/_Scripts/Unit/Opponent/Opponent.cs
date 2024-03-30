@@ -42,7 +42,7 @@ public class Opponent : Unit
         SpecificTransition(chasePlayerState, attackPlayerState, new FuncCondition(playerDetector.CanAttackPlayer));
         AnyTransition(rescueBlueFlagState, new FuncCondition(DetermineIfRescueBlueFlag));
         AnyTransition(carryRedFlagState, new FuncCondition(DetermineIfCarryRedFlag)); // move to red base
-        AnyTransition(fetchRedFlagState, new FuncCondition(() => !DetermineIfRescueBlueFlag() && !DetermineIfCarryRedFlag())); // move to blue base
+        AnyTransition(fetchRedFlagState, new FuncCondition(() => true)); // move to blue base
         
         // Set initial state
         stateMachine.SetInitialState(fetchRedFlagState);
@@ -90,6 +90,7 @@ public class Opponent : Unit
         base.Die();
         agent.enabled = false;
         _rigidbody.useGravity = false;
+        enabled = false; // so that the state machine FixedUpdate doesn't run and call the NavMesh SetDestination
     }
 
     protected override void Respawn()
@@ -97,5 +98,6 @@ public class Opponent : Unit
         base.Respawn();
         _rigidbody.useGravity = true;
         agent.enabled = true;
+        enabled = true;
     }
 }

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03ecd60b883cc504bac369300ea4ac83, type: 3}
   m_Name: AI Agent Movement Stats
   m_EditorClassIdentifier: 
-  Speed: 4.8
+  Speed: 4.7
   AngularSpeed: 160
   Acceleration: 8
-  PlayerDetectionSpeed: 8
+  PlayerDetectionSpeed: 7
   AttackSpeed: 10

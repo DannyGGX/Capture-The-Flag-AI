@@ -53,7 +53,7 @@ public class AttackPlayerState : OpponentBaseState
 
     public override void OnEnter()
     {
-        Debug.Log("AttackPlayerState");
+        opponent.Log("AttackPlayerState");
         Target = opponent.PlayerTransform;
         navMeshAgent.speed = movementStats.AttackSpeed;
     }
